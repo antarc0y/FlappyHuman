@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class WallMovement : MonoBehaviour
 {
-    public float movementSpeed = 5f; // Adjust the speed as needed
+    public float speed = 2f; // Adjust the speed as needed
+    public float squareSize = 10f; // Adjust the size of the square as needed
+
+    private float timer;
 
     void Update()
     {
-        // Get input values for movement
-        float verticalInput = Input.GetAxis("Vertical");
+        // Update the timer
+        timer += Time.deltaTime;
 
-        // Calculate the new position based on input and speed
-        Vector3 newPosition = transform.position +
-            new Vector3(0f, verticalInput, 0f) * movementSpeed * Time.deltaTime;
+        // Calculate the new position based on square motion
+        float x = Mathf.PingPong(timer * speed, squareSize) - squareSize / 2f;
+        float y = Mathf.PingPong(timer * speed, squareSize) - squareSize / 2f;
 
         // Update the position of the wall
-        transform.position = newPosition;
+        transform.position = new Vector3(x, y, transform.position.z);
     }
 }

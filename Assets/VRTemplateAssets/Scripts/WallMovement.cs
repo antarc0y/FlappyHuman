@@ -4,21 +4,38 @@ using UnityEngine;
 
 public class WallMovement : MonoBehaviour
 {
-    public float speed = 2f; // Adjust the speed as needed
+    public float speed = 0.5f; // Adjust the speed as needed
     public float squareSize = 10f; // Adjust the size of the square as needed
 
-    private float timer;
+    private Vector3[] waypoints;
+    private int currentWaypointIndex;
+
+    void Start()
+    {
+        // Define waypoints around the perimeter of the square
+        waypoints = new Vector3[]
+        {
+            new Vector3(squareSize / 2f, squareSize / 2f, 0f),
+            new Vector3(squareSize / 2f, -squareSize / 2f, 0f),
+            new Vector3(-squareSize / 2f, -squareSize / 2f, 0f),
+            new Vector3(-squareSize / 2f, squareSize / 2f, 0f)
+        };
+
+        // Set the initial position to the first waypoint
+        transform.position = waypoints[0];
+        currentWaypointIndex = 1;
+    }
 
     void Update()
     {
-        // Update the timer
-        timer += Time.deltaTime;
+        // Move towards the current waypoint
+        transform.position = Vector3.MoveTowards(transform.position, waypoints[currentWaypointIndex], speed * Time.deltaTime);
 
-        // Calculate the new position based on square motion
-        float x = Mathf.PingPong(timer * speed, squareSize) - squareSize / 2f;
-        float y = Mathf.PingPong(timer * speed, squareSize) - squareSize / 2f;
-
-        // Update the position of the wall
-        transform.position = new Vector3(x, y, transform.position.z);
+        // Check if the wall has reached the current waypoint
+        if (Vector3.Distance(transform.position, waypoints[currentWaypointIndex]) < 0.01f)
+        {
+            // Move to the next waypoint
+            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
+        }
     }
 }

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class ButtonClicked : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -14,5 +15,9 @@ public class NewBehaviourScript : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void OpenScene(string sceneName) {
+        SceneManager.LoadSceneAsync(sceneName);
     }
 }
